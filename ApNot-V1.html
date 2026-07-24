@@ -169,8 +169,11 @@
         <p>Aplikasi ini dibuat oleh : <span class="font-semibold text-primary">Hamdani Mustopa</span></p>
     </footer>
 
-    <!-- Script Logika Aplikasi -->
+    <!-- Script Logika Aplikasi & Integrasi Google Sheets -->
     <script>
+        // Ganti URL di bawah ini dengan URL Web App Google Apps Script Anda
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyiz43242K4zHwAHy7rG2FYupUrIPMOeZ54Ej3dVDngOVdZRdQ49OKae8juTj5wnX0/exec";
+
         let dataAkta = JSON.parse(localStorage.getItem('dataAktaNotaris')) || [
             {
                 hariTanggal: "Senin, 24/07/2026",
@@ -195,7 +198,6 @@
             }
 
             dataFilter.forEach((item, index) => {
-                // Cari index asli di array utama agar fungsi Edit & Hapus tetap akurat meskipun sedang difilter
                 const indexAsli = dataAkta.indexOf(item);
 
                 let row = `
@@ -286,14 +288,29 @@
 
             if (index === '') {
                 dataAkta.push(newData);
+                
+                // Kirim data ke Google Sheets via Web App
+                if (WEB_APP_URL && WEB_APP_URL !== "PASTIKAN_URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI") {
+                    fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newData)
+                    }).catch(error => {
+                        console.error('Error mengirim ke Google Sheets:', error);
+                    });
+                }
             } else {
                 dataAkta[index] = newData;
             }
 
             localStorage.setItem('dataAktaNotaris', JSON.stringify(dataAkta));
-            document.getElementById('inputPencarian').value = ''; // Reset pencarian setelah simpan
+            document.getElementById('inputPencarian').value = ''; 
             muatTabel();
             tutupModal();
+            alert("Data berhasil disimpan!");
         }
 
         function editData(index) {
@@ -318,7 +335,7 @@
             if (confirm('Apakah Anda yakin ingin menghapus data akta ini?')) {
                 dataAkta.splice(index, 1);
                 localStorage.setItem('dataAktaNotaris', JSON.stringify(dataAkta));
-                document.getElementById('inputPencarian').value = ''; // Reset pencarian setelah hapus
+                document.getElementById('inputPencarian').value = ''; 
                 muatTabel();
             }
         }
