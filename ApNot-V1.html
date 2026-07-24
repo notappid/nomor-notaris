@@ -191,7 +191,7 @@
         function muatTabel(dataFilter = dataAkta) {
             const tbody = document.getElementById('isiTabel');
             tbody.innerHTML = '';
-
+            
             if (dataFilter.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="10" class="text-center p-6 text-slate-400">Tidak ada data akta yang ditemukan.</td></tr>`;
                 return;
@@ -293,7 +293,6 @@
                 if (WEB_APP_URL && WEB_APP_URL !== "PASTIKAN_URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI") {
                     fetch(WEB_APP_URL, {
                         method: 'POST',
-                        mode: 'no-cors',
                         headers: {
                             'Content-Type': 'application/json'
                         },
