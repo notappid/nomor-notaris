@@ -1,39 +1,56 @@
-function simpanData(event) {
-    // Mencegah form agar tidak reload halaman secara default
-    if (event) event.preventDefault();
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Penomoran Akta Notaris</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
 
-    // 1. Ambil nilai dari masing-masing input form
-    const dataObjek = {
-        hariTanggal: document.getElementById('hariTanggal').value, // Sesuaikan ID elemen di HTML Anda
-        jam: document.getElementById('jam').value,
-        nomorAkta: document.getElementById('nomorAkta').value,
-        namaAkta: document.getElementById('namaAkta').value,
-        namaPenghadap: document.getElementById('namaPenghadap').value,
-        bankPt: document.getElementById('bankPt').value,
-        qqPihak: document.getElementById('qqPihak').value,
-        penanggungJawab: document.getElementById('penanggungJawab').value,
-        keterangan: document.getElementById('keterangan').value
-    };
+    <!-- BAGIAN KONTEN / TAMPILAN WEB ANDA DI SINI -->
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold">KANTOR NOTARIS & PPAT</h1>
+        <!-- Tombol dan Tabel Anda -->
+    </div>
 
-    // 2. Masukkan URL Web App Google Apps Script Anda yang berakhiran /exec
-    const urlWebApps = "https://script.google.com/macros/s/AKfycbz1hp2VZLdy4qkTymADP9Nc0jY9lhBSUpP5eK865SIScK9nVvjVPB706sGho6XVEEUi/exec"; 
+    <!-- BAGIAN SCRIPT JAVASCRIPT WAJIB DI DALAM TAG INI -->
+    <script>
+        function simpanData(event) {
+            if (event) event.preventDefault();
 
-    // 3. Kirim data menggunakan fetch dengan mode no-cors
-    fetch(urlWebApps, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataObjek)
-    })
-    .then(() => {
-        alert("Data berhasil disimpan!");
-        // Reset form atau muat ulang halaman untuk memperbarui tabel
-        location.reload();
-    })
-    .catch(error => {
-        console.error("Terjadi kesalahan:", error);
-        alert("Gagal terhubung ke server.");
-    });
-}
+            const dataObjek = {
+                hariTanggal: document.getElementById('hariTanggal').value,
+                jam: document.getElementById('jam').value,
+                nomorAkta: document.getElementById('nomorAkta').value,
+                namaAkta: document.getElementById('namaAkta').value,
+                namaPenghadap: document.getElementById('namaPenghadap').value,
+                bankPt: document.getElementById('bankPt').value,
+                qqPihak: document.getElementById('qqPihak').value,
+                penanggungJawab: document.getElementById('penanggungJawab').value,
+                keterangan: document.getElementById('keterangan').value
+            };
+
+            const urlWebApps = "https://script.google.com/macros/s/AKfycbz1hP2VZldy4qkTymADP9Nc0jY9lhBSUp5eK865SIScK9nVjVPB706sGho6XVEEUi/exec"; 
+
+            fetch(urlWebApps, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataObjek)
+            })
+            .then(() => {
+                alert("Data berhasil disimpan!");
+                location.reload();
+            })
+            .catch(error => {
+                console.error("Terjadi kesalahan:", error);
+                alert("Gagal terhubung ke server.");
+            });
+        }
+    </script>
+</body>
+</html>
