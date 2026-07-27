@@ -195,7 +195,6 @@
             }
 
             dataFilter.forEach((item, index) => {
-                // Cari index asli di array utama agar fungsi Edit & Hapus tetap akurat meskipun sedang difilter
                 const indexAsli = dataAkta.indexOf(item);
 
                 let row = `
@@ -284,6 +283,23 @@
                 keterangan: document.getElementById('keterangan').value,
             };
 
+            // ========================================================
+            // URL WEB APPS GOOGLE SHEETS
+            // Ganti teks di bawah dengan URL Web Apps Google Apps Script Anda
+            // ========================================================
+            const urlWebApps = "https://script.google.com/macros/s/AKfycbwQwM5kgrIuVOIiF9g99U7wl89twT3z24EmBcOZiNYbLGDDdZKzrxAsloQbybc-Xiua/exec"; 
+
+            if (urlWebApps !== "MASUKKAN_URL_WEB_APPS_ANDA_DI_SINI") {
+                fetch(urlWebApps, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(newData)
+                }).catch(error => console.error("Error:", error));
+            }
+
             if (index === '') {
                 dataAkta.push(newData);
             } else {
@@ -291,9 +307,10 @@
             }
 
             localStorage.setItem('dataAktaNotaris', JSON.stringify(dataAkta));
-            document.getElementById('inputPencarian').value = ''; // Reset pencarian setelah simpan
+            document.getElementById('inputPencarian').value = ''; 
             muatTabel();
             tutupModal();
+            alert("Data berhasil disimpan!");
         }
 
         function editData(index) {
@@ -318,7 +335,7 @@
             if (confirm('Apakah Anda yakin ingin menghapus data akta ini?')) {
                 dataAkta.splice(index, 1);
                 localStorage.setItem('dataAktaNotaris', JSON.stringify(dataAkta));
-                document.getElementById('inputPencarian').value = ''; // Reset pencarian setelah hapus
+                document.getElementById('inputPencarian').value = ''; 
                 muatTabel();
             }
         }
