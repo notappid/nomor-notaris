@@ -29,148 +29,219 @@
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <!-- Header / Kop Kantor -->
-    <header class="bg-gradient-to-r from-primary to-blue-900 text-white shadow-lg py-6 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-2xl md:text-3xl font-bold tracking-wide uppercase">KANTOR NOTARIS & PPAT</h1>
-            <h2 class="text-xl md:text-2xl font-semibold text-secondary mt-1">ISEP RAHMAYADI, S.H., M.Kn.</h2>
-            <p class="text-sm text-slate-300 mt-2">Jl. Pangeran Kornel No. 225 Sumedang</p>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow">
-        
-        <!-- Judul Aplikasi & Kontrol Aksi -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print">
-            <div>
-                <h3 class="text-xl font-bold text-primary">Buku Penomoran Akta Notaris</h3>
-                <p class="text-sm text-slate-500">Kelola dan pantau data akta masuk dengan mudah.</p>
+    <!-- HALAMAN LOGIN (Muncul Pertama Kali) -->
+    <div id="halamanLogin" class="fixed inset-0 bg-primary/90 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl border-t-4 border-secondary">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-primary">LOGIN SISTEM</h2>
+                <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Kantor Notaris & PPAT Isep Rahmayadi, S.H., M.Kn.</p>
             </div>
-            
-            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-                <!-- Kotak Pencarian -->
-                <div class="relative w-full md:w-64">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </span>
-                    <input type="text" id="inputPencarian" onkeyup="cariData()" placeholder="Cari data akta..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none shadow-sm">
-                </div>
-
-                <button onclick="bukaModalTambah()" class="bg-primary hover:bg-blue-900 text-white px-4 py-2 rounded-lg shadow font-medium transition flex items-center gap-2 whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-                    Tambah Akta
-                </button>
-                <button onclick="window.print()" class="bg-secondary hover:bg-amber-700 text-white px-4 py-2 rounded-lg shadow font-medium transition flex items-center gap-2 whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd"/></svg>
-                    Cetak / PDF
-                </button>
-            </div>
-        </div>
-
-        <!-- Tabel Data -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden print-area border border-slate-200">
-            <div class="overflow-x-auto">
-                <table id="tabelAkta" class="w-full text-left border-collapse text-xs md:text-sm">
-                    <thead>
-                        <tr class="bg-primary text-white uppercase tracking-wider">
-                            <th class="p-3 text-center">No</th>
-                            <th class="p-3">Hari, Tgl/Bln/Thn & Jam</th>
-                            <th class="p-3">Nomor Akta</th>
-                            <th class="p-3">Nama Akta</th>
-                            <th class="p-3">Nama Penghadap</th>
-                            <th class="p-3">Bank / PT</th>
-                            <th class="p-3">QQ. Pihak Bank / PT</th>
-                            <th class="p-3">Penanggung Jawab</th>
-                            <th class="p-3">Keterangan</th>
-                            <th class="p-3 text-center no-print">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="isiTabel" class="divide-y divide-slate-200">
-                        <!-- Data dinamis dari Javascript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modal Form (Tambah / Edit) -->
-    <div id="modalForm" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-xl max-w-2xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 id="modalTitle" class="text-lg font-bold text-primary">Tambah Data Akta</h3>
-                <button onclick="tutupModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
-            </div>
-            <form id="formAkta" onsubmit="simpanData(event)" class="space-y-4">
-                <input type="hidden" id="editIndex">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Pilih Tanggal (Otomatis Hari & Format)</label>
-                        <input type="date" id="pilihTanggal" onchange="prosesTanggalOtomatis()" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none bg-slate-50 mb-2">
-                        
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Teks Hari, Tgl/Bln/Thn (Bisa Diedit)</label>
-                        <input type="text" id="hariTanggal" required placeholder="Contoh: Senin, 24/07/2026" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Jam</label>
-                        <input type="text" id="jam" required placeholder="Contoh: 10:30 WIB" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nomor Akta</label>
-                        <input type="text" id="nomorAkta" required placeholder="Nomor Akta" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Akta</label>
-                        <input type="text" id="namaAkta" required placeholder="Nama Akta" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Penghadap</label>
-                        <input type="text" id="namaPenghadap" required placeholder="Nama Penghadap" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Bank / PT</label>
-                        <input type="text" id="bankPt" placeholder="Bank atau PT (Jika ada)" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">QQ. Pihak Bank / Pihak PT</label>
-                        <input type="text" id="qqPihak" placeholder="QQ Pihak terkait" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Penanggung Jawab</label>
-                        <input type="text" id="penanggungJawab" required placeholder="Nama Penanggung Jawab" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-                </div>
-
+            <form onsubmit="prosesLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Keterangan</label>
-                    <textarea id="keterangan" rows="2" placeholder="Keterangan tambahan..." class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Username</label>
+                    <input type="text" id="inputUser" required placeholder="Masukkan username" class="w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary outline-none bg-slate-50">
                 </div>
-
-                <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" onclick="tutupModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
-                    <button type="submit" class="bg-primary hover:bg-blue-900 text-white px-5 py-2 rounded-lg text-sm font-medium transition">Simpan Data</button>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+                    <input type="password" id="inputPass" required placeholder="Masukkan password" class="w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary outline-none bg-slate-50">
                 </div>
+                <button type="submit" class="w-full bg-primary hover:bg-blue-900 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200">
+                    Masuk ke Aplikasi
+                </button>
             </form>
+            <div class="text-center mt-4">
+                <p id="pesanError" class="text-xs text-rose-500 font-medium hidden">Username atau Password salah!</p>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 mt-8">
-        <p>Aplikasi ini dibuat oleh : <span class="font-semibold text-primary">Hamdani Mustopa</span></p>
-    </footer>
+    <!-- KONTEN UTAMA APLIKASI (Disembunyikan sebelum login) -->
+    <div id="kontenUtama" class="hidden flex-col min-h-screen justify-between">
+        <!-- Header / Kop Kantor -->
+        <header class="bg-gradient-to-r from-primary to-blue-900 text-white shadow-lg py-6 px-4">
+            <div class="max-w-7xl mx-auto text-center flex flex-col md:flex-row justify-between items-center">
+                <div class="mx-auto md:mx-0 text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-wide uppercase">KANTOR NOTARIS & PPAT</h1>
+                    <h2 class="text-xl md:text-2xl font-semibold text-secondary mt-1">ISEP RAHMAYADI, S.H., M.Kn.</h2>
+                    <p class="text-sm text-slate-300 mt-2">Jl. Pangeran Kornel No. 225 Sumedang</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button onclick="logout()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-2 rounded-lg font-medium shadow transition">Logout / Keluar</button>
+                </div>
+            </div>
+        </header>
 
-    <!-- Script Logika Aplikasi -->
+        <!-- Main Content -->
+        <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow">
+            <!-- Judul Aplikasi & Kontrol Aksi -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print">
+                <div>
+                    <h3 class="text-xl font-bold text-primary">Buku Penomoran Akta Notaris</h3>
+                    <p class="text-sm text-slate-500">Kelola dan pantau data akta masuk dengan mudah.</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+                    <!-- Kotak Pencarian -->
+                    <div class="relative w-full md:w-64">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </span>
+                        <input type="text" id="inputPencarian" onkeyup="cariData()" placeholder="Cari data akta..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none shadow-sm">
+                    </div>
+
+                    <button onclick="bukaModalTambah()" class="bg-primary hover:bg-blue-900 text-white px-4 py-2 rounded-lg shadow font-medium transition flex items-center gap-2 whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                        Tambah Akta
+                    </button>
+                    <button onclick="window.print()" class="bg-secondary hover:bg-amber-700 text-white px-4 py-2 rounded-lg shadow font-medium transition flex items-center gap-2 whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd"/></svg>
+                        Cetak / PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden print-area border border-slate-200">
+                <div class="overflow-x-auto">
+                    <table id="tabelAkta" class="w-full text-left border-collapse text-xs md:text-sm">
+                        <thead>
+                            <tr class="bg-primary text-white uppercase tracking-wider">
+                                <th class="p-3 text-center">No</th>
+                                <th class="p-3">Hari, Tgl/Bln/Thn & Jam</th>
+                                <th class="p-3">Nomor Akta</th>
+                                <th class="p-3">Nama Akta</th>
+                                <th class="p-3">Nama Penghadap</th>
+                                <th class="p-3">Bank / PT</th>
+                                <th class="p-3">QQ. Pihak Bank / PT</th>
+                                <th class="p-3">Penanggung Jawab</th>
+                                <th class="p-3">Keterangan</th>
+                                <th class="p-3 text-center no-print">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="isiTabel" class="divide-y divide-slate-200">
+                            <!-- Data dinamis dari Javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal Form (Tambah / Edit) -->
+        <div id="modalForm" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50 no-print">
+            <div class="bg-white rounded-xl max-w-2xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4 border-b pb-3">
+                    <h3 id="modalTitle" class="text-lg font-bold text-primary">Tambah Data Akta</h3>
+                    <button onclick="tutupModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
+                </div>
+                <form id="formAkta" onsubmit="simpanData(event)" class="space-y-4">
+                    <input type="hidden" id="editIndex">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Pilih Tanggal (Otomatis Hari & Format)</label>
+                            <input type="date" id="pilihTanggal" onchange="prosesTanggalOtomatis()" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none bg-slate-50 mb-2">
+                            
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Teks Hari, Tgl/Bln/Thn (Bisa Diedit)</label>
+                            <input type="text" id="hariTanggal" required placeholder="Contoh: Senin, 24/07/2026" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Jam</label>
+                            <input type="text" id="jam" required placeholder="Contoh: 10:30 WIB" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nomor Akta</label>
+                            <input type="text" id="nomorAkta" required placeholder="Nomor Akta" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Akta</label>
+                            <input type="text" id="namaAkta" required placeholder="Nama Akta" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Penghadap</label>
+                            <input type="text" id="namaPenghadap" required placeholder="Nama Penghadap" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Bank / PT</label>
+                            <input type="text" id="bankPt" placeholder="Bank atau PT (Jika ada)" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">QQ. Pihak Bank / Pihak PT</label>
+                            <input type="text" id="qqPihak" placeholder="QQ Pihak terkait" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Penanggung Jawab</label>
+                            <input type="text" id="penanggungJawab" required placeholder="Nama Penanggung Jawab" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Keterangan</label>
+                        <textarea id="keterangan" rows="2" placeholder="Keterangan tambahan..." class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-3 border-t">
+                        <button type="button" onclick="tutupModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
+                        <button type="submit" class="bg-primary hover:bg-blue-900 text-white px-5 py-2 rounded-lg text-sm font-medium transition">Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 mt-8">
+            <p>Aplikasi ini dibuat oleh : <span class="font-semibold text-primary">Hamdani Mustopa</span></p>
+        </footer>
+    </div>
+
+    <!-- Script Logika Aplikasi & Login -->
     <script>
+        // ATUR USERNAME DAN PASSWORD DI SINI SESUAI KEINGINAN ANDA
+        const USER_ADMIN = "admin";
+        const PASS_ADMIN = "notaris2026";
+
+        // Cek apakah sudah pernah login sebelumnya di sesi browser ini
+        window.onload = function() {
+            if (sessionStorage.getItem('statusLogin') === 'berhasil') {
+                bukaAplikasi();
+            }
+        };
+
+        function prosesLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('inputUser').value;
+            const pass = document.getElementById('inputPass').value;
+            const pesanError = document.getElementById('pesanError');
+
+            if (user === USER_ADMIN && pass === PASS_ADMIN) {
+                sessionStorage.setItem('statusLogin', 'berhasil');
+                bukaAplikasi();
+            } else {
+                pesanError.classList.remove('hidden');
+            }
+        }
+
+        function bukaAplikasi() {
+            document.getElementById('halamanLogin').classList.add('hidden');
+            const konten = document.getElementById('kontenUtama');
+            konten.classList.remove('hidden');
+            konten.classList.add('flex');
+            muatTabel();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('statusLogin');
+            location.reload();
+        }
+
         let dataAkta = JSON.parse(localStorage.getItem('dataAktaNotaris')) || [
             {
                 hariTanggal: "Senin, 24/07/2026",
@@ -283,11 +354,8 @@
                 keterangan: document.getElementById('keterangan').value,
             };
 
-            // ========================================================
-            // URL WEB APPS GOOGLE SHEETS
-            // Ganti teks di bawah dengan URL Web Apps Google Apps Script Anda
-            // ========================================================
-            const urlWebApps = "https://script.google.com/macros/s/AKfycbwQwM5kgrIuVOIiF9g99U7wl89twT3z24EmBcOZiNYbLGDDdZKzrxAsloQbybc-Xiua/exec"; 
+            // URL WEB APPS GOOGLE SHEETS ANDA
+            const urlWebApps = "https://script.google.com/macros/s/AKfycbwQm5kgriuVOliF9g99U7wl89tW3z24EmBcOZInyBLGDDdZkZrxAslOnQbybc-Xiua/exec"; 
 
             if (urlWebApps !== "MASUKKAN_URL_WEB_APPS_ANDA_DI_SINI") {
                 fetch(urlWebApps, {
@@ -339,8 +407,6 @@
                 muatTabel();
             }
         }
-
-        muatTabel();
     </script>
 </body>
 </html>
