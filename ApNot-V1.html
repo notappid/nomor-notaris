@@ -1,26 +1,39 @@
-// Contoh penulisan di dalam fungsi simpanData Anda:
-const urlWebApps = "https://script.google.com/macros/s/AKfycbz1hp2VZLdy4qkTymADP9Nc0jY9lhBSUpP5eK865SIScK9nVvjVPB706sGho6XVEEUi/exec";
+function simpanData(event) {
+    // Mencegah form agar tidak reload halaman secara default
+    if (event) event.preventDefault();
 
-// Ambil nilai dari form Anda, lalu ubah ke URLSearchParams
-const formData = new URLSearchParams({
-    hariTanggal: document.getElementById('id_hariTanggal').value, // sesuaikan id form Anda
-    jam: document.getElementById('id_jam').value,
-    nomorAkta: document.getElementById('id_nomorAkta').value,
-    namaAkta: document.getElementById('id_namaAkta').value,
-    namaPenghadap: document.getElementById('id_namaPenghadap').value,
-    bankPt: document.getElementById('id_bankPt').value,
-    qqPihak: document.getElementById('id_qqPihak').value,
-    penanggungJawab: document.getElementById('id_penanggungJawab').value,
-    keterangan: document.getElementById('id_keterangan').value
-});
+    // 1. Ambil nilai dari masing-masing input form
+    const dataObjek = {
+        hariTanggal: document.getElementById('hariTanggal').value, // Sesuaikan ID elemen di HTML Anda
+        jam: document.getElementById('jam').value,
+        nomorAkta: document.getElementById('nomorAkta').value,
+        namaAkta: document.getElementById('namaAkta').value,
+        namaPenghadap: document.getElementById('namaPenghadap').value,
+        bankPt: document.getElementById('bankPt').value,
+        qqPihak: document.getElementById('qqPihak').value,
+        penanggungJawab: document.getElementById('penanggungJawab').value,
+        keterangan: document.getElementById('keterangan').value
+    };
 
-// Kirim menggunakan GET fetch
-fetch(urlWebApps + "?" + formData.toString())
-    .then(response => response.json())
-    .then(data => {
+    // 2. Masukkan URL Web App Google Apps Script Anda yang berakhiran /exec
+    const urlWebApps = "https://script.google.com/macros/s/AKfycbz1hp2VZLdy4qkTymADP9Nc0jY9lhBSUpP5eK865SIScK9nVvjVPB706sGho6XVEEUi/exec"; 
+
+    // 3. Kirim data menggunakan fetch dengan mode no-cors
+    fetch(urlWebApps, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataObjek)
+    })
+    .then(() => {
         alert("Data berhasil disimpan!");
-        // Lakukan reset form atau reload tabel di sini
+        // Reset form atau muat ulang halaman untuk memperbarui tabel
+        location.reload();
     })
     .catch(error => {
-        console.error("Error:", error);
+        console.error("Terjadi kesalahan:", error);
+        alert("Gagal terhubung ke server.");
     });
+}
